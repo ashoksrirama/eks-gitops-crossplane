@@ -1,0 +1,24 @@
+---
+
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: aws-config
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/crossplane-iam-role
+spec:
+  podSecurityContext:
+    fsGroup: 2000
+
+---
+
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: crossplane-provider-aws
+spec:
+  package: crossplane/provider-aws:v0.24.1
+  controllerConfigRef:
+    name: aws-config
+
+---

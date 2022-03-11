@@ -1,0 +1,40 @@
+---
+
+apiVersion: ashoksrirama.com/v1alpha1
+kind: ClusterClaim
+metadata:
+  name: team-1-eks
+  labels:
+    cluster-owner: asramaa
+spec:
+  id: team-1-eks
+  compositionSelector:
+    matchLabels:
+      provider: aws
+      cluster: eks
+  parameters:
+    nodeSize: large
+    minNodeCount: 2
+    region: us-east-1
+    kmsKeyArn: "arn:aws:kms:us-east-1:000000000000:key/67121574-589a-4255-b697-70af81febbb9"
+    # karpenterRoleArn: "arn:aws:iam::000000000000:role/eks-karpenter-role"
+    
+
+---
+
+apiVersion: ashoksrirama.com/v1alpha1
+kind: GitOpsClaim
+metadata:
+  name: team-1-gitops
+  labels:
+    cluster-owner: asramaa
+spec:
+  id: team-1-gitops
+  compositionSelector:
+    matchLabels:
+      provider: argo
+  parameters:
+    kubeConfig:
+      secretName: team-1-eks-cluster
+      secretNamespace: crossplane-system
+    gitOpsRepo: https://github.com/ashoksrirama/devops-toolkit-crossplane.git
